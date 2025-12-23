@@ -1,0 +1,25 @@
+# app/models.py
+from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.sql import func
+from enum import Enum
+from .database import Base
+
+class LeadStatus(str, Enum):
+    NEW = "NEW"
+    CONTACTED = "CONTACTED"
+    INTERESTED = "INTERESTED"
+    PROPOSAL_SENT = "PROPOSAL_SENT"
+    PAID = "PAID"
+
+
+# app/models.py (continue)
+class Lead(Base):
+    __tablename__ = "leads"
+
+    id = Column(Integer, primary_key=True, index=True)
+    business_name = Column(String, nullable=False)
+    email = Column(String, nullable=False, unique=True)
+    industry = Column(String, nullable=False)
+    city = Column(String, nullable=False)
+    status = Column(String, default=LeadStatus.NEW.value)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
