@@ -1,3 +1,4 @@
+from ..dependencies.auth import get_current_user
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime
@@ -5,6 +6,9 @@ from datetime import datetime
 from ..database import SessionLocal
 from ..models import Lead, LeadStatus, Message, EmailLog
 from ..schemas import OutreachResponse
+from app.dependencies.roles import require_role
+from app.core.roles import Role
+
 
 router = APIRouter(prefix="/outreach", tags=["Outreach"])
 
@@ -16,7 +20,8 @@ def get_db():
         db.close()
 
 @router.post("/send", response_model=OutreachResponse)
-def send_email(lead_id: int, db: Session = Depends(get_db)):
+def send_email(lead_id: int, db: Session = Depends(get_db),
+    user=Depends(require_role([Role.ADMIN, Role.AGENT]))):
     # 1. Fetch lead
     lead = db.query(Lead).filter(Lead.id == lead_id).first()
     if not lead:

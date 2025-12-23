@@ -1,6 +1,16 @@
 # app/schemas.py
 from pydantic import BaseModel, EmailStr
 
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str
+
+
 class LeadCreate(BaseModel):
     business_name: str
     email: EmailStr
@@ -16,7 +26,7 @@ class LeadResponse(BaseModel):
     status: str
 
     class Config:
-        orm_mode = True
+        from_attributes: True
 
 
 class AIEmailResponse(BaseModel):

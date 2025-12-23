@@ -1,3 +1,4 @@
+from ..dependencies.auth import get_current_user
 import stripe
 import os
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -6,6 +7,10 @@ from sqlalchemy.orm import Session
 from ..database import SessionLocal
 from ..models import Lead, LeadStatus, Payment
 from ..schemas import PaymentLinkResponse
+from app.dependencies.roles import require_role
+from app.core.roles import Role
+
+
 
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
@@ -21,7 +26,8 @@ def get_db():
 
 # 🔹 Create Payment Link
 @router.post("/create/{lead_id}", response_model=PaymentLinkResponse)
-def create_payment_link(lead_id: int, db: Session = Depends(get_db)):
+def create_payment_link(lead_id: int, db: Session = Depends(get_db),
+    user=Depends(require_role([Role.ADMIN]))  ):
     lead = db.query(Lead).filter(Lead.id == lead_id).first()
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")

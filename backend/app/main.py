@@ -3,7 +3,8 @@ load_dotenv()
 # app/main.py
 from fastapi import FastAPI
 from .database import Base, engine
-from .routes import leads, ai, outreach, replies, proposals, payments
+from .routes import leads, ai, outreach, replies, proposals, payments, auth
+from .routes import users
 
  
 
@@ -17,6 +18,9 @@ app.include_router(outreach.router)
 app.include_router(replies.router)
 app.include_router(proposals.router)
 app.include_router(payments.router)
+app.include_router(auth.router)
+app.include_router(users.router)
+
 
 
 @app.get("/")

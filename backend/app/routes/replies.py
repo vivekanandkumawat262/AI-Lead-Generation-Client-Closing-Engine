@@ -1,9 +1,13 @@
+from ..dependencies.auth import get_current_user
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..database import SessionLocal
 from ..models import Lead, LeadStatus, Reply
 from ..schemas import ReplyRequest, ReplyResponse
+from app.dependencies.roles import require_role
+from app.core.roles import Role
+
 
 router = APIRouter(prefix="/replies", tags=["Replies"])
 
@@ -16,7 +20,8 @@ def get_db():
 
 
 @router.post("/{lead_id}", response_model=ReplyResponse)
-def classify_reply(lead_id: int, reply: ReplyRequest, db: Session = Depends(get_db)):
+def classify_reply(lead_id: int, reply: ReplyRequest, db: Session = Depends(get_db),
+    user=Depends(require_role([Role.ADMIN, Role.AGENT]))):
     lead = db.query(Lead).filter(Lead.id == lead_id).first()
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")
