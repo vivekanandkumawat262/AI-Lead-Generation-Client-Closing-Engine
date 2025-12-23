@@ -17,3 +17,8 @@ class LeadResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class AIEmailResponse(BaseModel):
+    subject: str
+    body: str

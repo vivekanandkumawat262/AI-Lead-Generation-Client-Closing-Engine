@@ -23,3 +23,14 @@ class Lead(Base):
     city = Column(String, nullable=False)
     status = Column(String, default=LeadStatus.NEW.value)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+# app/models.py (add below Lead model)
+class Message(Base):
+    __tablename__ = "messages"
+
+    id = Column(Integer, primary_key=True)
+    lead_id = Column(Integer)
+    subject = Column(String)
+    content = Column(String)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
