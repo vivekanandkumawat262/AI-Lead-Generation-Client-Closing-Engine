@@ -65,3 +65,14 @@ class Proposal(Base):
     lead_id = Column(Integer)
     content = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+class Payment(Base):
+    __tablename__ = "payments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    lead_id = Column(Integer)
+    stripe_payment_intent = Column(String)
+    amount = Column(Integer)
+    status = Column(String)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())

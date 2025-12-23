@@ -43,3 +43,8 @@ class ReplyResponse(BaseModel):
 class ProposalResponse(BaseModel):
     proposal: str
     lead_status: str
+
+
+class PaymentLinkResponse(BaseModel):
+    payment_url: str
+    lead_status: str
