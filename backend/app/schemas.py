@@ -22,3 +22,8 @@ class LeadResponse(BaseModel):
 class AIEmailResponse(BaseModel):
     subject: str
     body: str
+
+
+class OutreachResponse(BaseModel):
+    message: str
+    lead_status: str

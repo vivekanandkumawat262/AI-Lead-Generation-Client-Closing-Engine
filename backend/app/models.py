@@ -3,6 +3,8 @@ from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.sql import func
 from enum import Enum
 from .database import Base
+from sqlalchemy import ForeignKey
+
 
 class LeadStatus(str, Enum):
     NEW = "NEW"
@@ -34,3 +36,14 @@ class Message(Base):
     subject = Column(String)
     content = Column(String)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+
+class EmailLog(Base):
+    __tablename__ = "email_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    lead_id = Column(Integer, ForeignKey("leads.id"))
+    subject = Column(String, nullable=False)
+    body = Column(String, nullable=False)
+    sent_at = Column(DateTime(timezone=True), server_default=func.now())
