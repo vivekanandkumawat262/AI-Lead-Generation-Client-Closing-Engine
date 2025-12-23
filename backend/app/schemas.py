@@ -27,3 +27,19 @@ class AIEmailResponse(BaseModel):
 class OutreachResponse(BaseModel):
     message: str
     lead_status: str
+
+
+
+
+class ReplyRequest(BaseModel):
+    content: str
+
+
+class ReplyResponse(BaseModel):
+    intent: str
+    lead_status: str
+
+
+class ProposalResponse(BaseModel):
+    proposal: str
+    lead_status: str

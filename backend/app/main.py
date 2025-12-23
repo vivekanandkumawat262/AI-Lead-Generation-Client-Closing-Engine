@@ -1,7 +1,7 @@
 # app/main.py
 from fastapi import FastAPI
 from .database import Base, engine
-from .routes import leads, ai, outreach
+from .routes import leads, ai, outreach, replies, proposals
 
 
  
@@ -13,6 +13,9 @@ app = FastAPI(title="CRM AutoPilot")
 app.include_router(leads.router)
 app.include_router(ai.router)
 app.include_router(outreach.router)
+app.include_router(replies.router)
+app.include_router(proposals.router)
+
 
 
 @app.get("/")

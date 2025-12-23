@@ -47,3 +47,21 @@ class EmailLog(Base):
     subject = Column(String, nullable=False)
     body = Column(String, nullable=False)
     sent_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class Reply(Base):
+    __tablename__ = "replies"
+
+    id = Column(Integer, primary_key=True, index=True)
+    lead_id = Column(Integer)
+    content = Column(String, nullable=False)
+    intent = Column(String, nullable=False)  # INTERESTED / NOT_INTERESTED
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+class Proposal(Base):
+    __tablename__ = "proposals"
+
+    id = Column(Integer, primary_key=True, index=True)
+    lead_id = Column(Integer)
+    content = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
