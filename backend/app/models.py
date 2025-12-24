@@ -55,6 +55,9 @@ class EmailLog(Base):
     lead_id = Column(Integer, ForeignKey("leads.id"))
     subject = Column(String, nullable=False)
     body = Column(String, nullable=False)
+    status = Column(String, default="PENDING")  # PENDING, SENT, FAILED
+    error = Column(String, nullable=True)
+
     sent_at = Column(DateTime(timezone=True), server_default=func.now())
 
 class Reply(Base):

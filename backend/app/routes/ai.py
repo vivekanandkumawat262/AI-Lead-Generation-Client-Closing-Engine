@@ -2,7 +2,7 @@ from ..dependencies.auth import get_current_user
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from ..database import SessionLocal
-from ..models import Lead, Message
+from ..models import EmailLog, Lead, Message
 from ..schemas import AIEmailResponse
 from app.services.ai_email_service import generate_ai_email
 
@@ -22,6 +22,23 @@ def generate_email(lead_id: int, db: Session = Depends(get_db),
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")
 
-    email = generate_ai_email(lead)
+    email_data = generate_ai_email(lead)
+     # 🔹 Save to EmailLog
+    email_log = EmailLog(
+        lead_id=lead.id,
+        subject=email_data["subject"],
+        body=email_data["body"]
+    )
 
-    return email
+    message_log = Message(
+        lead_id=lead.id,
+        subject=email_data["subject"],
+        content=email_data["body"]
+    )
+    
+    db.add(message_log)
+    db.add(email_log)
+    db.commit()
+    db.refresh(email_log)
+
+    return email_data
